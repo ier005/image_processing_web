@@ -25,7 +25,8 @@
                 <h3>已处理列表：</h3>
                 <ul>
                     {% for file in files %}
-                    <li><a href="{{ 'player?file=' + file }}">{{ file }}</a></li>
+                    <li><a href="{{ 'player?file=' + file }}">{{ file }}</a>
+                        <a href="{{ 'display?file=' + file }}"> 查看数据库结果 </a></li>
                     {% endfor %}
                 </ul>
             </div>

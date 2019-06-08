@@ -3,8 +3,13 @@ import os
 import gzip
 import tarfile
 from flask import Flask, request, make_response, send_from_directory, render_template, stream_with_context, Response, redirect, url_for
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
+
+app.config["MONGO_URI"] = "mongodb://localhost:27017/image"
+mongo = PyMongo(app)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 upload_dir = BASE_DIR + "/upload/"
 temp_dir = BASE_DIR + "/temp/"
@@ -110,6 +115,12 @@ def upload_success(chunk=0):  # 所有分片均上传完后被调用
 def player():
     filename = request.args.get('file')
     return render_template('player.html', file=filename)
+
+@app.route('/display', methods=['GET'])
+def display():
+    filename = request.args.get('file')
+    video = mongo.db[filename].find()
+    return render_template('display.html', file=filename, data=video)
 
 # To do
 def after_upload(file):
